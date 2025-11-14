@@ -39,14 +39,13 @@ class _MyCustomFormState extends State<MyCustomForm> {
           padding: const EdgeInsets.all(16.0),
 
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
 
               TextField( 
               controller: myController,
               ),
 
-              const SizedBox(height: 20),
+              Spacer(),
 
               OutlinedButton(
                 onPressed: () {
@@ -142,6 +141,8 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 },
                 child: const Text('Modal Bottom Sheet'),
               ),
+
+              Spacer(),
             ]
           ),
       ),
