@@ -32,7 +32,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormBuilderState>();
-  String selectedChip = 'Flutter';
   int textFieldLength = 0;
 
   @override
@@ -56,93 +55,39 @@ class _MyHomePageState extends State<MyHomePage> {
                     //---------------------------------------
                     // Choice Chips
                     //---------------------------------------
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(10),
+                    FormBuilderChoiceChips<String>(
+                      name: 'choice_chips',
+                      initialValue: 'Flutter',
+                      decoration: InputDecoration(
+                        labelText: 'Choice Chips',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: const Text('Choice Chips', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                          ),
-                          const SizedBox(height: 8),
-                          Wrap(
-                            spacing: 8.0,
-                            runSpacing: 8.0,
-                            alignment: WrapAlignment.center,
-                            children: [
-                              ChoiceChip(
-                                label: Text(
-                                  'Flutter',
-                                  style: TextStyle(
-                                    color: selectedChip == 'Flutter' ? Colors.black : Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                selected: selectedChip == 'Flutter',
-                                onSelected: (selected) {
-                                  setState(() {
-                                    selectedChip = 'Flutter';
-                                  });
-                                },
-                                selectedColor: Colors.grey[400],
-                                backgroundColor: Colors.purple[300],
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                              ),
-                              ChoiceChip(
-                                label: Text(
-                                  'Android',
-                                  style: TextStyle(
-                                    color: selectedChip == 'Android' ? Colors.black : Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                selected: selectedChip == 'Android',
-                                onSelected: (selected) {
-                                  setState(() {
-                                    selectedChip = 'Android';
-                                  });
-                                },
-                                selectedColor: Colors.grey[400],
-                                backgroundColor: Colors.purple[300],
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                              ),
-                              ChoiceChip(
-                                label: Text(
-                                  'Chrome OS',
-                                  style: TextStyle(
-                                    color: selectedChip == 'Chrome OS' ? Colors.black : Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                selected: selectedChip == 'Chrome OS',
-                                onSelected: (selected) {
-                                  setState(() {
-                                    selectedChip = 'Chrome OS';
-                                  });
-                                },
-                                selectedColor: Colors.grey[400],
-                                backgroundColor: Colors.purple[300],
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                      options: const [
+                        FormBuilderChipOption(
+                          value: 'Flutter',
+                          child: Text('Flutter', style: TextStyle(fontSize: 16)),
+                        ),
+                        FormBuilderChipOption(
+                          value: 'Android',
+                          child: Text('Android', style: TextStyle(fontSize: 16)),
+                        ),
+                        FormBuilderChipOption(
+                          value: 'Chrome OS',
+                          child: Text('Chrome OS', style: TextStyle(fontSize: 16)),
+                        ),
+                      ],
+                      spacing: 8.0,
+                      runSpacing: 8.0,
+                      alignment: WrapAlignment.center,
+                      selectedColor: Colors.grey[400],
+                      backgroundColor: Colors.purple[300],
+                      labelStyle: const TextStyle(color: Colors.white, fontSize: 16),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
                       ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     ),
                     const SizedBox(height: 20),
 
@@ -163,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             name: 'switch',
                             title: const Text('This is a switch'),
                             initialValue: false,
-                            decoration: const InputDecoration(
+                            decoration: const InputDecoration(  
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.zero,
                             ),
@@ -256,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
           final formData = _formKey.currentState?.value ?? {};
           
           String formString = '''
-          Choice Chips: $selectedChip
+          Choice Chips: ${formData['choice_chips'] ?? ''}
           Switch: ${formData['switch'] ?? false}
           Text Field: ${formData['text_field'] ?? ''}
           Dropdown Field: ${formData['dropdown_field'] ?? ''}
