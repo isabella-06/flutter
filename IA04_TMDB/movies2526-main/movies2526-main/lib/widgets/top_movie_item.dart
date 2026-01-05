@@ -2,22 +2,22 @@ import 'package:fade_shimmer/fade_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movies/api/api.dart';
-import 'package:movies/models/actor.dart';
-import 'package:movies/screens/details_screen_actors.dart';
+import 'package:movies/models/movie.dart';
+import 'package:movies/screens/details_screen_movies.dart';
 import 'package:movies/widgets/index_number.dart';
 
-/// Widget that displays a single top actor card with ranking number
-/// Shows the actor's profile picture and a ranking badge
-class TopActorItem extends StatelessWidget {
-  const TopActorItem({
+/// Widget that displays a single top movie card with ranking number
+/// Shows the movie poster image and a ranking badge
+class TopMovieItem extends StatelessWidget {
+  const TopMovieItem({
     super.key,
-    required this.actor,
+    required this.movie,
     required this.index,
   });
 
-  /// The actor object to display
-  final Actor actor;
-  /// The ranking index of this actor
+  /// The movie object to display
+  final Movie movie;
+  /// The ranking index of this movie
   final int index;
 
   @override
@@ -25,22 +25,17 @@ class TopActorItem extends StatelessWidget {
     return Stack(
       children: [
         GestureDetector(
-          onTap: () => Get.to(
-            ActorDetailsScreen(actor: actor),
-          ),
+          onTap: () => Get.to(() => MovieDetailsScreen(movie: movie)),
           child: Container(
             margin: const EdgeInsets.only(left: 12),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.network(
-                Api.imageBaseUrl + actor.profilePath,
+                Api.imageBaseUrl + movie.posterPath,
                 fit: BoxFit.cover,
                 height: 250,
                 width: 180,
-                errorBuilder: (_, __, ___) => const Icon(
-                  Icons.broken_image,
-                  size: 180,
-                ),
+                errorBuilder: (_, __, ___) => const Icon(Icons.broken_image, size: 180),
                 loadingBuilder: (_, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return const FadeShimmer(

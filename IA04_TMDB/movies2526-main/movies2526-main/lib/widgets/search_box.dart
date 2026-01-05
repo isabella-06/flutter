@@ -3,12 +3,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:movies/controllers/search_controller.dart';
 
-
+/// Custom search input field widget with a search icon button
+/// Used in the search screen to input movie search queries
 class SearchBox extends StatelessWidget {
   const SearchBox({
     required this.onSumbit,
     super.key,
   });
+  /// Callback function triggered when the user submits the search
   final VoidCallback onSumbit;
   @override
   Widget build(BuildContext context) {

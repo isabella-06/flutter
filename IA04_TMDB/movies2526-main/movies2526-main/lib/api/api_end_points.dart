@@ -1,3 +1,4 @@
+/// API endpoint constants used for constructing TMDB API requests
 class ApiEndPoints {
   static const products = "products";
   static const popularMovies = "movie/popular";

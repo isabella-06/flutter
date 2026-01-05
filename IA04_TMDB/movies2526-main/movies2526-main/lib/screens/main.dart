@@ -3,13 +3,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:movies/controllers/bottom_navigator_controller.dart';
 
+/// Main navigation wrapper screen that displays the bottom navigation bar
+/// and switches between Home, Search, and Watch List screens
 class Main extends StatelessWidget {
   Main({super.key});
   final BottomNavigatorController controller = Get.put(BottomNavigatorController());
   @override
   Widget build(BuildContext context) {
+    /// Reactively rebuild when the navigation index changes
     return Obx(
       () => GestureDetector(
+        /// Close keyboard when tapping outside text fields
         onTap: () {
           FocusScope.of(context).unfocus();
         },

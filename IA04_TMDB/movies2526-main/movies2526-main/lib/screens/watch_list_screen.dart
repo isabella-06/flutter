@@ -1,114 +1,136 @@
-import 'package:fade_shimmer/fade_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movies/api/api.dart';
-import 'package:movies/controllers/bottom_navigator_controller.dart';
 import 'package:movies/controllers/movies_controller.dart';
 import 'package:movies/screens/details_screen_movies.dart';
-import 'package:movies/widgets/infos.dart';
+import 'package:movies/screens/details_screen_series.dart';
 
 class WatchList extends StatelessWidget {
-  const WatchList({super.key});
+  WatchList({super.key});
+
+  final MoviesController controller = Get.put(MoviesController());
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(34.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      tooltip: 'Back to home',
-                      onPressed: () =>
-                          Get.find<BottomNavigatorController>().setIndex(0),
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const Text(
-                      'Watch list',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 24,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 33,
-                      height: 33,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                if (Get.find<MoviesController>().watchListMovies.isNotEmpty)
-                  ...Get.find<MoviesController>().watchListMovies.map(
-                        (movie) => Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () => Get.to(MovieDetailsScreen(movie: movie)),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: Image.network(
-                                      Api.imageBaseUrl + movie.posterPath,
-                                      height: 180,
-                                      width: 100,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (_, __, ___) => const Icon(
-                                        Icons.broken_image,
-                                        size: 180,
-                                      ),
-                                      loadingBuilder: (_, __, ___) {
-                                        // ignore: no_wildcard_variable_uses
-                                        if (___ == null) return __;
-                                        return const FadeShimmer(
-                                          width: 150,
-                                          height: 150,
-                                          highlightColor: Color(0xff22272f),
-                                          baseColor: Color(0xff20252d),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Infos(movie: movie)
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ),
-                      ),
-                if (Get.find<MoviesController>().watchListMovies.isEmpty)
-                  const Column(
-                    children: [
-                      SizedBox(
-                        height: 200,
-                      ),
-                      Text(
-                        'No movies in your watch list',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w200,
-                        ),
-                      ),
-                    ],
-                  ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Watch List', style: TextStyle(fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: DefaultTabController(
+        length: 2,
+        child: Column(
+          children: [
+            const TabBar(
+              indicatorColor: Color(0xFF3A3F47),
+              indicatorWeight: 4,
+              labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              tabs: [
+                Tab(text: 'Movies'),
+                Tab(text: 'TV Series'),
               ],
             ),
-          ),
-        ));
+            
+            Expanded(
+              child: TabBarView(
+                children: [
+                  Obx(
+                    () => controller.watchListMovies.isEmpty
+                        ? const Center(child: Text('No movies added.'))
+                        : ListView.separated(
+                            padding: const EdgeInsets.all(20),
+                            itemCount: controller.watchListMovies.length,
+                            separatorBuilder: (_, __) => const SizedBox(height: 20),
+                            itemBuilder: (context, index) {
+                              final movie = controller.watchListMovies[index];
+                              return GestureDetector(
+                                onTap: () => Get.to(() => MovieDetailsScreen(movie: movie)),
+                                child: Row(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        Api.imageBaseUrl + movie.posterPath,
+                                        width: 80, height: 120, fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) => Container(width: 80, height: 120, color: Colors.grey),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 20),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(movie.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                          const SizedBox(height: 5),
+                                          Text(movie.releaseDate, style: const TextStyle(color: Colors.grey)),
+                                          const SizedBox(height: 5),
+                                          Text(movie.voteAverage.toString(), style: const TextStyle(color: Colors.amber)),
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete_outline, color: Colors.red),
+                                      onPressed: () => controller.addToWatchList(movie),
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+
+                  Obx(
+                    () => controller.watchListSeries.isEmpty
+                        ? const Center(child: Text('No series added.'))
+                        : ListView.separated(
+                            padding: const EdgeInsets.all(20),
+                            itemCount: controller.watchListSeries.length,
+                            separatorBuilder: (_, __) => const SizedBox(height: 20),
+                            itemBuilder: (context, index) {
+                              final serie = controller.watchListSeries[index];
+                              return GestureDetector(
+                                onTap: () => Get.to(() => SeriesDetailsScreen(serie: serie)),
+                                child: Row(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        Api.imageBaseUrl + serie.posterPath,
+                                        width: 80, height: 120, fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) => Container(width: 80, height: 120, color: Colors.grey),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 20),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(serie.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                          const SizedBox(height: 5),
+                                          Text(serie.firstAirDate, style: const TextStyle(color: Colors.grey)),
+                                          const SizedBox(height: 5),
+                                          Text(serie.voteAverage.toString(), style: const TextStyle(color: Colors.amber)),
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete_outline, color: Colors.red),
+                                      onPressed: () => controller.addToWatchListSeries(serie),
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

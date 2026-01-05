@@ -3,8 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:movies/models/movie.dart';
 import 'package:movies/utils/utils.dart';
 
+/// Widget that displays movie information including title, rating, genre, and release date
+/// Used in search results to show quick movie details
 class Infos extends StatelessWidget {
   const Infos({super.key, required this.movie});
+  /// The movie object containing the data to display
   final Movie movie;
   @override
   Widget build(BuildContext context) {

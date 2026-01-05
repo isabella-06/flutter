@@ -4,11 +4,14 @@ import 'package:get/get.dart';
 import 'package:movies/models/movie.dart';
 import 'package:movies/screens/details_screen_movies.dart';
 
+/// Generic tab builder widget that displays a grid of movies from a Future API call
+/// Shows loading shimmers while data is being fetched and builds a grid once data arrives
 class TabBuilder extends StatelessWidget {
   const TabBuilder({
     required this.future,
     super.key,
   });
+  /// Future that resolves to a list of movies to display
   final Future<List<Movie>?> future;
   @override
   Widget build(BuildContext context) {
@@ -20,7 +23,6 @@ class TabBuilder extends StatelessWidget {
           if (snapshot.hasData) {
             return GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
-              // shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 15.0,

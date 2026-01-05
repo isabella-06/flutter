@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -9,6 +7,7 @@ void main() {
   runApp(const MyApp());
 }
 
+/// Root widget of the application
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

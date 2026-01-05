@@ -4,8 +4,11 @@ import 'package:get/get.dart';
 import 'package:movies/api/api.dart';
 import 'package:movies/api/api_service.dart';
 import 'package:movies/models/actor.dart';
+import 'package:movies/models/credit.dart';
 import 'package:movies/models/movie.dart';
-import 'package:movies/screens/details_screen_movies.dart'; // Import the new screen
+import 'package:movies/models/serie.dart';
+import 'package:movies/screens/details_screen_movies.dart';
+import 'package:movies/screens/details_screen_series.dart';
 
 class ActorDetailsScreen extends StatelessWidget {
   const ActorDetailsScreen({super.key, required this.actor});
@@ -19,7 +22,6 @@ class ActorDetailsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ... (Keep Header, Image, and Bio sections exactly as before) ...
               Padding(
                 padding: const EdgeInsets.all(24),
                 child: Row(
@@ -74,30 +76,51 @@ class ActorDetailsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
 
-              // --- KNOWN FOR SECTION (UPDATED) ---
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: const Text('Known For', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                child: const Text('Known For (Movies & TV)', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
               const SizedBox(height: 15),
               
               SizedBox(
-                height: 200,
-                child: FutureBuilder<List<Movie>?>(
-                  future: ApiService.getActorMovies(actor.id),
+                height: 220,
+                child: FutureBuilder<List<Credit>?>(
+                  future: ApiService.getActorCombinedCredits(actor.id),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    if (snapshot.hasData && snapshot.data != null && snapshot.data!.isNotEmpty) {
                       return ListView.separated(
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         scrollDirection: Axis.horizontal,
                         itemCount: snapshot.data!.length,
                         separatorBuilder: (_, __) => const SizedBox(width: 15),
                         itemBuilder: (context, index) {
-                          final movie = snapshot.data![index];
+                          final credit = snapshot.data![index];
                           return GestureDetector(
-                            // CLICKING A MOVIE NOW GOES TO MOVIE DETAILS SCREEN
                             onTap: () {
-                              Get.to(() => MovieDetailsScreen(movie: movie));
+                              if (credit.mediaType == 'movie') {
+                                final movie = Movie(
+                                  id: credit.id,
+                                  title: credit.title,
+                                  posterPath: credit.posterPath,
+                                  backdropPath: credit.backdropPath,
+                                  overview: credit.overview,
+                                  releaseDate: credit.releaseDate,
+                                  voteAverage: credit.voteAverage,
+                                  genreIds: [],
+                                );
+                                Get.to(() => MovieDetailsScreen(movie: movie));
+                              } else {
+                                final serie = Serie(
+                                  id: credit.id,
+                                  name: credit.title,
+                                  posterPath: credit.posterPath,
+                                  backdropPath: credit.backdropPath,
+                                  overview: credit.overview,
+                                  firstAirDate: credit.releaseDate,
+                                  voteAverage: credit.voteAverage,
+                                );
+                                Get.to(() => SeriesDetailsScreen(serie: serie));
+                              }
                             },
                             child: SizedBox(
                               width: 120,
@@ -106,13 +129,19 @@ class ActorDetailsScreen extends StatelessWidget {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: Image.network(
-                                      'https://image.tmdb.org/t/p/w200${movie.posterPath}',
+                                      'https://image.tmdb.org/t/p/w200${credit.posterPath}',
                                       height: 150, width: 100, fit: BoxFit.cover,
                                       errorBuilder: (_, __, ___) => Container(height: 150, width: 100, color: Colors.grey, child: const Icon(Icons.movie)),
                                     ),
                                   ),
                                   const SizedBox(height: 5),
-                                  Text(movie.title, maxLines: 2, textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12))
+                                  Text(
+                                    credit.title, 
+                                    maxLines: 2, 
+                                    textAlign: TextAlign.center, 
+                                    overflow: TextOverflow.ellipsis, 
+                                    style: const TextStyle(fontSize: 12)
+                                  ),
                                 ],
                               ),
                             ),
