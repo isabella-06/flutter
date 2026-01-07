@@ -2,19 +2,12 @@ import 'dart:convert';
 
 /// Represents a TV series with details fetched from TMDB API
 class Serie {
-  /// Unique identifier for the series
   int id;
-  /// Title/name of the TV series
   String name;
-  /// URL path to the series poster image
   String posterPath;
-  /// URL path to the series backdrop image
   String backdropPath;
-  /// Plot summary/description of the series
   String overview;
-  /// Date when the series first aired
   String firstAirDate;
-  /// Average vote/rating score from users
   double voteAverage;
 
   Serie({

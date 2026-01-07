@@ -2,15 +2,10 @@ import 'dart:convert';
 
 /// Represents an actor/person with details fetched from TMDB API
 class Actor {
-  /// Unique identifier for the actor
   int id;
-  /// Full name of the actor
   String name;
-  /// URL path to the actor's profile picture
   String profilePath;
-  /// Biographical information about the actor
   String biography;
-  /// Popularity score of the actor
   double popularity;
   
   Actor({

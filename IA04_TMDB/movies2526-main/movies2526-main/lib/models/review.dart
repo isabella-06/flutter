@@ -1,12 +1,10 @@
 
 /// Represents a user review for a movie
 class Review {
-  /// Name of the user who wrote the review
   String author;
-  /// Content/text of the review
   String comment;
-  /// Rating given by the reviewer (typically 0-10)
   double rating;
+  
   Review({
     required this.author,
     required this.comment,

@@ -2,22 +2,15 @@ import 'dart:convert';
 
 /// Represents a movie object with details fetched from TMDB API
 class Movie {
-  /// Unique identifier for the movie
   int id;
-  /// Title of the movie
   String title;
-  /// URL path to the movie poster image
   String posterPath;
-  /// URL path to the movie backdrop image
   String backdropPath;
-  /// Plot summary/description of the movie
   String overview;
-  /// Release date of the movie
   String releaseDate;
-  /// Average vote/rating score from users
   double voteAverage;
-  /// List of genre IDs associated with the movie
   List<int> genreIds;
+  
   Movie({
     required this.id,
     required this.title,

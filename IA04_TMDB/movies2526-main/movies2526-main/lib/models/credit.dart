@@ -1,21 +1,14 @@
 /// Represents a credit (movie or TV series) associated with an actor
 /// Used to display movies and TV shows that an actor has appeared in
 class Credit {
-  /// Unique identifier for the credit
   int id;
-  /// Title of the movie or name of the TV series
   String title;
-  /// URL path to the poster image
   String posterPath;
-  /// URL path to the backdrop image
   String backdropPath;
-  /// Plot summary/description
   String overview;
-  /// Release date of the movie or first air date of the series
   String releaseDate;
-  /// Average vote/rating score from users
   double voteAverage;
-  /// Type of media: either "movie" or "tv"
+
   String mediaType;
 
   Credit({
